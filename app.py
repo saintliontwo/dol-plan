@@ -94,4 +94,4 @@ def save_json(plan: dict):
 if __name__ == '__main__':
     start_date = date_parsing()
     plan = plan_generator(__csvfile, start_date)
-    save_json(plan) 
+    save_json(plan)
