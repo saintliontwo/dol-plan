@@ -4,6 +4,9 @@
 ## description
 Вторая версия приложения генерирует план смены вечерених мероприятий с web-интерфейсом 
 
+## stack 
+Python, Flask, HTML, CSS
+
 ## requirements
 
 ```
