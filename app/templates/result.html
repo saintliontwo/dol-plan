@@ -1,0 +1,261 @@
+{% extends "base.html" %}
+
+{% block title %}Готовый план{% endblock %}
+{% block style %}
+  <style>
+    h3 {
+      text-align: center;
+      line-height: 0;
+    }
+    table{
+      margin-left: auto;
+      margin-right: auto;
+      border-collapse: collapse;
+      border: 1px solid black;
+      width: 700px;
+    }
+    tr, th, td {
+      border: 1px solid black;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<h3>КАЛЕНДАРНЫЙ ПЛАН РАБОТЫ ДОЛ "ОРЛЕНОК"</h3>
+<h3>ППО МПЗ Роспрофком</h3>
+<h3>{{period}} СМЕНА {{year}}г.</h3><br>
+<table>
+  <caption></caption>
+  <tr class="row1">
+    <td rowspan="3" class="day d1">{{ plan["1"]["day description"]["date"] }}, {{ plan["1"]["day description"]["name day"] }}</td>
+    <td class="tod-morning">УТРО:</td>
+    <td class="event-morning d1">{{ plan["1"]["events"]["morning"] }}</td>
+    <td rowspan="3" class="day d12">{{ plan["12"]["day description"]["date"] }}, {{ plan["12"]["day description"]["name day"] }}</td>
+    <td class="tod-morning">УТРО:</td>
+    <td class="event-morning d12">{{ plan["12"]["events"]["morning"] }}</td>
+  </tr>
+  <tr class="row2">
+    <td class="tod-afternoon">ДЕНЬ:</td>
+    <td class="event-afternoon d1">{{ plan["1"]["events"]["afternoon"] }}</td>
+    <td class="tod-afternoon">ДЕНЬ:</td>
+    <td class="event-afternoon d12">{{ plan["12"]["events"]["afternoon"] }}</td>
+  </tr>
+  <tr class="row3">
+    <td class="tod-evening">ВЕЧЕР:</td>
+    <td class="event-evening d1">{{ plan["1"]["events"]["evening"] }}</td>
+    <td class="tod-evening">ВЕЧЕР:</td>
+    <td class="evening-evening d12">{{ plan["12"]["events"]["evening"] }}</td>
+  </tr>
+
+  <tr class="row1">
+    <td rowspan="3" class="day d2">{{ plan["2"]["day description"]["date"] }}, {{ plan["2"]["day description"]["name day"] }}</td>
+    <td class="tod-morning">УТРО:</td>
+    <td class="event-morning d2">{{ plan["2"]["events"]["morning"] }}</td>
+    <td rowspan="3" class="day d13">{{ plan["13"]["day description"]["date"] }}, {{ plan["13"]["day description"]["name day"] }}</td>
+    <td class="tod-morning">УТРО:</td>
+    <td class="event-morning d13">{{ plan["13"]["events"]["morning"] }}</td>
+  </tr>
+  <tr class="row2">
+    <td class="tod-afternoon">ДЕНЬ:</td>
+    <td class="event-afternoon d2">{{ plan["2"]["events"]["afternoon"] }}</td>
+    <td class="tod-afternoon">ДЕНЬ:</td>
+    <td class="event-afternoon d13">{{ plan["13"]["events"]["afternoon"] }}</td>
+  </tr>
+  <tr class="row3">
+    <td class="tod-evening">ВЕЧЕР:</td>
+    <td class="event-evening d2">{{ plan["2"]["events"]["evening"] }}</td>
+    <td class="tod-evening">ВЕЧЕР:</td>
+    <td class="evening-evening d13">{{ plan["13"]["events"]["evening"] }}</td>
+  </tr>
+
+  <tr class="row1">
+    <td rowspan="3" class="day d3">{{ plan["3"]["day description"]["date"] }}, {{ plan["3"]["day description"]["name day"] }}</td>
+    <td class="tod-morning">УТРО:</td>
+    <td class="event-morning d3">{{ plan["3"]["events"]["morning"] }}</td>
+    <td rowspan="3" class="day d14">{{ plan["14"]["day description"]["date"] }}, {{ plan["14"]["day description"]["name day"] }}</td>
+    <td class="tod-morning">УТРО:</td>
+    <td class="event-morning d14">{{ plan["14"]["events"]["morning"] }}</td>
+  </tr>
+  <tr class="row2">
+    <td class="tod-afternoon">ДЕНЬ:</td>
+    <td class="event-afternoon d3">{{ plan["3"]["events"]["afternoon"] }}</td>
+    <td class="tod-afternoon">ДЕНЬ:</td>
+    <td class="event-afternoon d14">{{ plan["14"]["events"]["afternoon"] }}</td>
+  </tr>
+  <tr class="row3">
+    <td class="tod-evening">ВЕЧЕР:</td>
+    <td class="event-evening d3">{{ plan["3"]["events"]["evening"] }}</td>
+    <td class="tod-evening">ВЕЧЕР:</td>
+    <td class="evening-evening d14">{{ plan["14"]["events"]["evening"] }}</td>
+  </tr>
+
+  <tr class="row1">
+    <td rowspan="3" class="day d4">{{ plan["4"]["day description"]["date"] }}, {{ plan["4"]["day description"]["name day"] }}</td>
+    <td class="tod-morning">УТРО:</td>
+    <td class="event-morning d4">{{ plan["4"]["events"]["morning"] }}</td>
+    <td rowspan="3" class="day d15">{{ plan["15"]["day description"]["date"] }}, {{ plan["15"]["day description"]["name day"] }}</td>
+    <td class="tod-morning">УТРО:</td>
+    <td class="event-morning d15">{{ plan["15"]["events"]["morning"] }}</td>
+  </tr>
+  <tr class="row2">
+    <td class="tod-afternoon">ДЕНЬ:</td>
+    <td class="event-afternoon d4">{{ plan["4"]["events"]["afternoon"] }}</td>
+    <td class="tod-afternoon">ДЕНЬ:</td>
+    <td class="event-afternoon d15">{{ plan["15"]["events"]["afternoon"] }}</td>
+  </tr>
+  <tr class="row3">
+    <td class="tod-evening">ВЕЧЕР:</td>
+    <td class="event-evening d4">{{ plan["4"]["events"]["evening"] }}</td>
+    <td class="tod-evening">ВЕЧЕР:</td>
+    <td class="evening-evening d15">{{ plan["15"]["events"]["evening"] }}</td>
+  </tr>
+
+  <tr class="row1">
+    <td rowspan="3" class="day d5">{{ plan["5"]["day description"]["date"] }}, {{ plan["5"]["day description"]["name day"] }}</td>
+    <td class="tod-morning">УТРО:</td>
+    <td class="event-morning d5">{{ plan["5"]["events"]["morning"] }}</td>
+    <td rowspan="3" class="day d16">{{ plan["16"]["day description"]["date"] }}, {{ plan["16"]["day description"]["name day"] }}</td>
+    <td class="tod-morning">УТРО:</td>
+    <td class="event-morning d16">{{ plan["16"]["events"]["morning"] }}</td>
+  </tr>
+  <tr class="row2">
+    <td class="tod-afternoon">ДЕНЬ:</td>
+    <td class="event-afternoon d5">{{ plan["5"]["events"]["afternoon"] }}</td>
+    <td class="tod-afternoon">ДЕНЬ:</td>
+    <td class="event-afternoon d16">{{ plan["16"]["events"]["afternoon"] }}</td>
+  </tr>
+  <tr class="row3">
+    <td class="tod-evening">ВЕЧЕР:</td>
+    <td class="event-evening d5">{{ plan["5"]["events"]["evening"] }}</td>
+    <td class="tod-evening">ВЕЧЕР:</td>
+    <td class="evening-evening d16">{{ plan["16"]["events"]["evening"] }}</td>
+  </tr>
+
+  <tr class="row1">
+    <td rowspan="3" class="day d6">{{ plan["6"]["day description"]["date"] }}, {{ plan["6"]["day description"]["name day"] }}</td>
+    <td class="tod-morning">УТРО:</td>
+    <td class="event-morning d6">{{ plan["6"]["events"]["morning"] }}</td>
+    <td rowspan="3" class="day d17">{{ plan["17"]["day description"]["date"] }}, {{ plan["17"]["day description"]["name day"] }}</td>
+    <td class="tod-morning">УТРО:</td>
+    <td class="event-morning d17">{{ plan["17"]["events"]["morning"] }}</td>
+  </tr>
+  <tr class="row2">
+    <td class="tod-afternoon">ДЕНЬ:</td>
+    <td class="event-afternoon d6">{{ plan["6"]["events"]["afternoon"] }}</td>
+    <td class="tod-afternoon">ДЕНЬ:</td>
+    <td class="event-afternoon d17">{{ plan["17"]["events"]["afternoon"] }}</td>
+  </tr>
+  <tr class="row3">
+    <td class="tod-evening">ВЕЧЕР:</td>
+    <td class="event-evening d6">{{ plan["6"]["events"]["evening"] }}</td>
+    <td class="tod-evening">ВЕЧЕР:</td>
+    <td class="evening-evening d17">{{ plan["17"]["events"]["evening"] }}</td>
+  </tr>
+
+  <tr class="row1">
+    <td rowspan="3" class="day d7">{{ plan["7"]["day description"]["date"] }}, {{ plan["7"]["day description"]["name day"] }}</td>
+    <td class="tod-morning">УТРО:</td>
+    <td class="event-morning d7">{{ plan["7"]["events"]["morning"] }}</td>
+    <td rowspan="3" class="day d18">{{ plan["18"]["day description"]["date"] }}, {{ plan["18"]["day description"]["name day"] }}</td>
+    <td class="tod-morning">УТРО:</td>
+    <td class="event-morning d18">{{ plan["18"]["events"]["morning"] }}</td>
+  </tr>
+  <tr class="row2">
+    <td class="tod-afternoon">ДЕНЬ:</td>
+    <td class="event-afternoon d7">{{ plan["7"]["events"]["afternoon"] }}</td>
+    <td class="tod-afternoon">ДЕНЬ:</td>
+    <td class="event-afternoon d18">{{ plan["18"]["events"]["afternoon"] }}</td>
+  </tr>
+  <tr class="row3">
+    <td class="tod-evening">ВЕЧЕР:</td>
+    <td class="event-evening d7">{{ plan["7"]["events"]["evening"] }}</td>
+    <td class="tod-evening">ВЕЧЕР:</td>
+    <td class="evening-evening d18">{{ plan["18"]["events"]["evening"] }}</td>
+  </tr>
+
+  <tr class="row1">
+    <td rowspan="3" class="day d8">{{ plan["8"]["day description"]["date"] }}, {{ plan["8"]["day description"]["name day"] }}</td>
+    <td class="tod-morning">УТРО:</td>
+    <td class="event-morning d8">{{ plan["8"]["events"]["morning"] }}</td>
+    <td rowspan="3" class="day d19">{{ plan["19"]["day description"]["date"] }}, {{ plan["19"]["day description"]["name day"] }}</td>
+    <td class="tod-morning">УТРО:</td>
+    <td class="event-morning d19">{{ plan["19"]["events"]["morning"] }}</td>
+  </tr>
+  <tr class="row2">
+    <td class="tod-afternoon">ДЕНЬ:</td>
+    <td class="event-afternoon d8">{{ plan["8"]["events"]["afternoon"] }}</td>
+    <td class="tod-afternoon">ДЕНЬ:</td>
+    <td class="event-afternoon d19">{{ plan["19"]["events"]["afternoon"] }}</td>
+  </tr>
+  <tr class="row3">
+    <td class="tod-evening">ВЕЧЕР:</td>
+    <td class="event-evening d8">{{ plan["8"]["events"]["evening"] }}</td>
+    <td class="tod-evening">ВЕЧЕР:</td>
+    <td class="evening-evening d19">{{ plan["19"]["events"]["evening"] }}</td>
+  </tr>
+
+  <tr class="row1">
+    <td rowspan="3" class="day d9">{{ plan["9"]["day description"]["date"] }}, {{ plan["9"]["day description"]["name day"] }}</td>
+    <td class="tod-morning">УТРО:</td>
+    <td class="event-morning d9">{{ plan["9"]["events"]["morning"] }}</td>
+    <td rowspan="3" class="day d20">{{ plan["20"]["day description"]["date"] }}, {{ plan["20"]["day description"]["name day"] }}</td>
+    <td class="tod-morning">УТРО:</td>
+    <td class="event-morning d20">{{ plan["20"]["events"]["morning"] }}</td>
+  </tr>
+  <tr class="row2">
+    <td class="tod-afternoon">ДЕНЬ:</td>
+    <td class="event-afternoon d9">{{ plan["9"]["events"]["afternoon"] }}</td>
+    <td class="tod-afternoon">ДЕНЬ:</td>
+    <td class="event-afternoon d20">{{ plan["20"]["events"]["afternoon"] }}</td>
+  </tr>
+  <tr class="row3">
+    <td class="tod-evening">ВЕЧЕР:</td>
+    <td class="event-evening d9">{{ plan["9"]["events"]["evening"] }}</td>
+    <td class="tod-evening">ВЕЧЕР:</td>
+    <td class="evening-evening d20">{{ plan["20"]["events"]["evening"] }}</td>
+  </tr>
+
+  <tr class="row1">
+    <td rowspan="3" class="day d10">{{ plan["10"]["day description"]["date"] }}, {{ plan["10"]["day description"]["name day"] }}</td>
+    <td class="tod-morning">УТРО:</td>
+    <td class="event-morning d10">{{ plan["10"]["events"]["morning"] }}</td>
+    <td rowspan="3" class="day d21">{{ plan["21"]["day description"]["date"] }}, {{ plan["21"]["day description"]["name day"] }}</td>
+    <td class="tod-morning">УТРО:</td>
+    <td class="event-morning d21">{{ plan["21"]["events"]["morning"] }}</td>
+  </tr>
+  <tr class="row2">
+    <td class="tod-afternoon">ДЕНЬ:</td>
+    <td class="event-afternoon d10">{{ plan["10"]["events"]["afternoon"] }}</td>
+    <td class="tod-afternoon">ДЕНЬ:</td>
+    <td class="event-afternoon d21">{{ plan["21"]["events"]["afternoon"] }}</td>
+  </tr>
+  <tr class="row3">
+    <td class="tod-evening">ВЕЧЕР:</td>
+    <td class="event-evening d10">{{ plan["10"]["events"]["evening"] }}</td>
+    <td class="tod-evening">ВЕЧЕР:</td>
+    <td class="evening-evening d21">{{ plan["21"]["events"]["evening"] }}</td>
+  </tr>
+
+  <tr class="row1">
+    <td rowspan="3" class="day d11">{{ plan["11"]["day description"]["date"] }}, {{ plan["11"]["day description"]["name day"] }}</td>
+    <td class="tod-morning">УТРО:</td>
+    <td class="event-morning d11">{{ plan["11"]["events"]["morning"] }}</td>
+    <td rowspan="3" class="day d22"></td>
+    <td class="tod-morning">УТРО:</td>
+    <td class="event-morning d22"></td>
+  </tr>
+  <tr class="row2">
+    <td class="tod-afternoon">ДЕНЬ:</td>
+    <td class="event-afternoon d11">{{ plan["11"]["events"]["afternoon"] }}</td>
+    <td class="tod-afternoon">ДЕНЬ:</td>
+    <td class="event-afternoon d22"></td>
+  </tr>
+  <tr class="row3">
+    <td class="tod-evening">ВЕЧЕР:</td>
+    <td class="event-evening d11">{{ plan["11"]["events"]["evening"] }}</td>
+    <td class="tod-evening">ВЕЧЕР:</td>
+    <td class="evening-evening d22"></td>
+  </tr>
+
+</table>
+{% endblock %}
