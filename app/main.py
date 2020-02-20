@@ -1,38 +1,44 @@
-"""
-
-"""
-
 import datetime
 import json
 
-FIRST_DAY = datetime.date(2020, 7, 15)  # ДАТА УКАЗАНА
-FINAL_PLAN = None
 
-reserved_days = {time_of_day: [] for time_of_day in ("morning", "afternoon", "evening")}
+def transform_date(date: str) -> datetime:
+    """
+        Преобразование строковой переменной в обект datetime
+        :param date: строковое представление даты %Y-%m-%d;
+    """
+    year, month, day = (int(i) for i in date.split('-'))
+    return datetime.date(year, month, day)
 
 
-def convert_json(file_path):
+def convert_json(file_path: str):
+    """
+        Преобразование json-файла в словарь
+        :param file_path: строковое представление
+    """
     with open(file_path, encoding="utf-8") as file:
         return json.load(file)
 
 
-def insert_date_info(start_date):
+def insert_date_info(start_date: datetime):
     """
-    :param start_date:
-    :return schema: план с раставленной датой и обязательными мероприятиями на пятницу, субботу
+        Инициализация календарных мероприятий в схеме
+        :param start_date: дата начала смены
+        :return schema: план с раставленной датой и календарными мероприятиями
     """
-    schema = convert_json(r"data\schema.json")
-    calendar_events = convert_json(r"data\calendar_event_list.json")
+    schema = convert_json(r"application\data\schema.json")  # получаем схему нашег плана
+    calendar_events = convert_json(r"application\data\calendar_event_list.json")  # получаем словарь календарных событий
+
     for i in range(0, 21):
         day = start_date + datetime.timedelta(days=i)
         day_info = schema[str(i + 1)]["day description"]
-        day_info["date"] = day.strftime("%d.%m")       # строковое представление дня, наприм. 02.10
-        day_info["name day"] = day.strftime("%A")      # день недели, напр. Friday
-        # ЗДЕСЬ ПРОВЕРЯЕМ УСЛОВИЯ для субботы и пятницы
+        day_info["date"] = day.strftime("%d.%m")        # строковое представление дня, наприм. 02.10
+        day_info["name day"] = day.strftime("%A")       # день недели, напр. Friday
+        """условия для присвоения дню календарных событий субботы и пятницы"""
         day_events = schema[str(i + 1)]["events"]
-        if i+1 in range(1, 3+1) or i in range(19, 21+1):  # начало или конец смены
+        if i+1 in range(1, 3+1) or i in range(19, 21+1):  # начало или конец смены - календрные события не присваиваются
             continue
-        else:
+        else:  # присвоение календарных событий
             if day_info["name day"] == "Saturday":
                 for time_of_day in calendar_events["Saturday"]["events"]:
                     day_events[time_of_day] = calendar_events["Saturday"]["events"][time_of_day]
@@ -42,8 +48,12 @@ def insert_date_info(start_date):
     return schema
 
 
-def generate_event(plan, event_list, tof):
-    """tof: time of day - on of the list: [evening, afternoon, morning] """
+def generate_event(plan: dict, event_list: dict, tof: str):
+    """
+        :param plan: план с мероприятиями
+        :param event_list: словарь с мероприятиями на определенное время суток
+        :param tof: time of day - одно из значений списка [evening, afternoon, morning]
+    """
     for event in event_list:
         # событие в списке одно
         if "event" in event.keys():
@@ -64,7 +74,6 @@ def generate_event(plan, event_list, tof):
             if len(event["day"]) < 3:
                 for time_of_day in event['events']:  # перебираем все времена суток
                     plan[event["day"]]["events"][time_of_day] = event['events'][time_of_day]
-
             # неопределенная дата
             elif len(event["day"]) >= 3:
                 start, end = [int(n) for n in event["day"].split("-")]  # date districts
@@ -147,21 +156,21 @@ def generate_unimportant(plan, event_list):
     return plan
 
 
-if __name__ == "__main__":
+def generate_plan(date):
     # copy schema and insert calendar days
-    plan = insert_date_info(FIRST_DAY)
+    plan = insert_date_info(date)  #
     # evening
-    evening_events_list = r"data\evening_event_list.json"
-    plan = generate_event(plan, convert_json(evening_events_list), tof="evening")
+    evening_events_list = r"application\data\evening_event_list.json"
+    evening_plan = generate_event(plan, convert_json(evening_events_list), tof="evening")
     # afternoon
-    afternoon_events_list = r"data\afternoon_event_list.json"
-    plan = generate_event(plan, convert_json(afternoon_events_list), tof="afternoon")
+    afternoon_events_list = r"application\data\afternoon_event_list.json"
+    afternoon_plan = generate_event(evening_plan, convert_json(afternoon_events_list), tof="afternoon")
     # morning
-    morning_event_list = r"data\morning_event_list.json"
-    plan = generate_event(plan, convert_json(morning_event_list), tof="morning")
+    morning_event_list = r"application\data\morning_event_list.json"
+    morning_plan = generate_event(afternoon_plan, convert_json(morning_event_list), tof="morning")
     # unimportant
-    unimportant_event_list = r"data\unimportant_event_list.json"
-    plan = generate_unimportant(plan, convert_json(unimportant_event_list))
+    unimportant_event_list = r"application\data\unimportant_event_list.json"
+    FINAL_PLAN = generate_unimportant(morning_plan, convert_json(unimportant_event_list))
     # print(plan)
-
+    return FINAL_PLAN
 

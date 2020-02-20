@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Заполнение формы{% endblock %}
+
+{% block content %}
+  <h3>Заполни форму </h3>
+  <form action="" method="post">
+    {{ form.hidden_tag() }}
+
+    <p>
+      {{ form.main_event.label }}<br>
+      {{ form.main_event(size=32) }}
+    </p>
+    <p>
+      {{ form.period.label }}<br>
+      {{ form.period() }}
+    </p>
+    <p>
+      {{ form.date.label }}<br>
+      {{ form.date() }}
+    </p>
+
+    <p>{{ form.submit() }}</p>
+  </form>
+{% endblock %}

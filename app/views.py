@@ -1,20 +1,33 @@
-from app import app
+from application import app
+from .main import generate_plan, transform_date
 from flask import redirect, render_template, request, url_for
+from .forms import MyForm
 
 
 @app.route('/')
 def get_home():
-    """Стартовая страница"""
     return render_template('home.html')
 
 
-@app.route('/form')
+@app.route('/form', methods=['GET', 'POST'])
 def get_form():
-    """Страница с необходимой формой"""
-    pass
+    form = MyForm(request.form)
+    if request.method == 'POST' and form.validate_on_submit():
+        return redirect(url_for('get_result',
+                                period=request.form.get("period"),
+                                date=request.form.get("date"),
+                                main_event=request.args.get("main_event")),
+                        code=302)
+    return render_template('form.html', form=form)
 
 
 @app.route('/result')
 def get_result():
-    """Стартовая с готовым планом"""
-    pass
+    period = request.args.get("period")
+    main_event = request.args.get("main_event")
+    start_date=request.args.get("date")
+    plan = generate_plan(transform_date(start_date))
+    return render_template("result.html",
+                           plan=plan,
+                           period=period,
+                           year=start_date[:4])

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Домашняя страница{% endblock %}
+{% block style %}
+  {# "Необходимо реализовать таблицу стилей #}
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+{% endblock %}
+
+{% block content %}
+  <h3>Добро пожаловать на главную страницу</h3>
+  <p>Это главная страница сайта который предназначен для создания плана мероприятий и работ детского
+    оздоровительного лагеря <a href="https://www.dol-orlenok.ru/">Орленок</a> на летний сезон.</p>
+  <p>Для того чтобы создать план пройдите по ссылке - <a href="{{ url_for('get_form') }}">СОЗДАТЬ ПЛАН</a></p>
+{% endblock %}
