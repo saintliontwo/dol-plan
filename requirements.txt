@@ -1,5 +1,0 @@
-Flask==1.1.1
-FLASK-WTF==0.12.2
-Jinjia2==2.10.3
-Werkzeug==0.16.0
-wtforms==2.2.1
