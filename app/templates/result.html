@@ -13,10 +13,16 @@
       border-collapse: collapse;
       border: 1px solid black;
       width: 700px;
+      /* empty cells */
+      border-collapse: separate;
+      empty-cells: hide;
     }
     tr, th, td {
       border: 1px solid black;
     }
+    /*
+    .over-range {border-style:hidden;}
+    */
   </style>
 {% endblock %}
 
@@ -240,21 +246,21 @@
     <td rowspan="3" class="day d11">{{ plan["11"]["day description"]["date"] }}, {{ plan["11"]["day description"]["name day"] }}</td>
     <td class="tod-morning">УТРО:</td>
     <td class="event-morning d11">{{ plan["11"]["events"]["morning"] }}</td>
-    <td rowspan="3" class="day d22"></td>
-    <td class="tod-morning">УТРО:</td>
-    <td class="event-morning d22"></td>
+    <td rowspan="3" class="day over-range"></td>
+    <td class="tod-morning over-range"></td>
+    <td class="event-morning over-range"></td>
   </tr>
   <tr class="row2">
     <td class="tod-afternoon">ДЕНЬ:</td>
     <td class="event-afternoon d11">{{ plan["11"]["events"]["afternoon"] }}</td>
-    <td class="tod-afternoon">ДЕНЬ:</td>
-    <td class="event-afternoon d22"></td>
+    <td class="tod-afternoon over-range"></td>
+    <td class="event-afternoon over-range"></td>
   </tr>
   <tr class="row3">
     <td class="tod-evening">ВЕЧЕР:</td>
     <td class="event-evening d11">{{ plan["11"]["events"]["evening"] }}</td>
-    <td class="tod-evening">ВЕЧЕР:</td>
-    <td class="evening-evening d22"></td>
+    <td class="tod-evening over-range"></td>
+    <td class="evening-evening over-range"></td>
   </tr>
 
 </table>
