@@ -1,3 +1,6 @@
+"""greedy вариант генерации плана"""
+
+
 import datetime
 import json
 
@@ -11,166 +14,167 @@ def transform_date(date: str) -> datetime:
     return datetime.date(year, month, day)
 
 
-def convert_json(file_path: str):
+def convert_json(file_path: str) -> dict:
     """
-        Преобразование json-файла в словарь
+        Выгрузка и преобразование json-файла в словарь
         :param file_path: строковое представление
     """
-    with open(file_path, encoding="utf-8") as file:
+    with open(file_path, encoding="utf-8-sig", ) as file:
         return json.load(file)
 
 
-def insert_date_info(start_date: datetime):
+def localize_day_name(day_number: str) -> str:
     """
-        Инициализация календарных мероприятий в схеме
+        :param day_number: представление дня недели datetime.strftime("%w")
+        :return: день недели в необходимом формате
+    """
+    local_day_dict = {
+        "0": "пн",
+        "1": "вт",
+        "2": "ср",
+        "3": "чт",
+        "4": "пт",
+        "5": "сб",
+        "6": "вс",
+    }
+    return local_day_dict[day_number]
+
+
+def insert_date_info(start_date: datetime) -> dict:
+    """
+        Инициализация календарных мероприятий в схеме.
         :param start_date: дата начала смены
         :return schema: план с раставленной датой и календарными мероприятиями
     """
-    schema = convert_json(r"application\data\schema.json")  # получаем схему нашег плана
-    calendar_events = convert_json(r"application\data\calendar_event_list.json")  # получаем словарь календарных событий
+    schema = convert_json(r"application\data\schema.json")                          # скелет плана
+    calendar_events = convert_json(r"application\data\calendar_event_list.json")    # календарные события
 
     for i in range(0, 21):
-        day = start_date + datetime.timedelta(days=i)
-        day_info = schema[str(i + 1)]["day description"]
-        day_info["date"] = day.strftime("%d.%m")        # строковое представление дня, наприм. 02.10
-        day_info["name day"] = day.strftime("%A")       # день недели, напр. Friday
-        """условия для присвоения дню календарных событий субботы и пятницы"""
-        day_events = schema[str(i + 1)]["events"]
-        if i+1 in range(1, 3+1) or i in range(19, 21+1):  # начало или конец смены - календрные события не присваиваются
+        day = start_date + datetime.timedelta(days=i)                   # порядковый день смены
+        day_events = schema[str(i + 1)]["events"]                       # блок с событиями
+        day_info = schema[str(i + 1)]["day description"]                # блок с информацией
+        day_info["date"] = day.strftime("%d.%m")                        # строковое представление дня (02.10)
+        day_info["name day"] = localize_day_name(day.strftime("%w"))    # день недели (пн)
+
+        if i+1 in range(1, 3+1) or i in range(19, 21+1):    # в начале/конце смены календрные события не присваиваются
             continue
-        else:  # присвоение календарных событий
-            if day_info["name day"] == "Saturday":
-                for time_of_day in calendar_events["Saturday"]["events"]:
-                    day_events[time_of_day] = calendar_events["Saturday"]["events"][time_of_day]
-            elif day_info["name day"] == "Friday":
-                for time_of_day in calendar_events["Friday"]["event"]:
-                    day_events[time_of_day] = calendar_events["Friday"]["event"][time_of_day]
+        else:                                               # присвоение календарных событий
+            name_day = day_info["name day"]
+            if name_day == "Saturday":
+                for tod in calendar_events[name_day]["events"]:
+                    day_events[tod] = calendar_events[name_day]["events"][tod]
+            elif name_day == "Friday":
+                for tod in calendar_events[name_day]["event"]:
+                    day_events[tod] = calendar_events[name_day]["event"][tod]
     return schema
 
 
-def generate_event(plan: dict, event_list: dict, tof: str):
+def generate_event(plan: dict, event_list: dict, tod: str) -> dict:
     """
-        :param plan: план с мероприятиями
-        :param event_list: словарь с мероприятиями на определенное время суток
-        :param tof: time of day - одно из значений списка [evening, afternoon, morning]
+        Функция распределеяет мероприятие(-ия) по дням.
+        :param plan: план-скелет
+        :param event_list: словарь с мероприятиями на выбранное время суток
+        :param tod: time of day - значений времени суток: evening/afternoon/morning
+        :return new_plan: новый план сгенерированных событий
     """
-    for event in event_list:
-        # событие в списке одно
-        if "event" in event.keys():
-            if len(event["day"]) < 3:       # определенная дата
-                plan[event["day"]]["events"][tof] = event["event"][tof]
-            elif len(event["day"]) >= 3:    # неопределенная дата
-                start, end = [int(num) for num in event["day"].split("-")]
+    new_plan = plan
+    for current_day in event_list:
+        if "event" in current_day.keys():                                             # мероприятие одно
+            if len(current_day["day"]) < 3:                                           # мероприятие имеет определенную дату
+                new_plan[current_day["day"]]["events"][tod] = current_day["event"][tod]
+            elif len(current_day["day"]) >= 3:                                        # мероприятие НЕ имеет определенную дату
+                start, end = [int(num) for num in current_day["day"].split("-")]
                 for date in range(start, end + 1):
                     """>>> место для проверки очередности и последовательности мероприятий <<<"""
-                    if plan[str(date)]["events"][tof] is None:      # может не сработать из за приведения типов
-                        plan[str(date)]["events"][tof] = event["event"][tof]
-                        break # nothings was here
+                    if new_plan[str(date)]["events"][tod] is None:
+                        new_plan[str(date)]["events"][tod] = current_day["event"][tod]
+                        break
                     else:
                         continue  # continue
-        # событие в списке несколько
-        elif "events" in event.keys():
-            # определенная дата
-            if len(event["day"]) < 3:
-                for time_of_day in event['events']:  # перебираем все времена суток
-                    plan[event["day"]]["events"][time_of_day] = event['events'][time_of_day]
-            # неопределенная дата
-            elif len(event["day"]) >= 3:
-                start, end = [int(n) for n in event["day"].split("-")]  # date districts
-                for day in range(start, end + 1):  # iterate for days
+        elif "events" in current_day.keys():                                          # событий в списке несколько
+            if len(current_day["day"]) < 3:                                           # мероприятия имеют определенную дату
+                for tod_ in current_day['events']:
+                    new_plan[current_day["day"]]["events"][tod_] = current_day['events'][tod_]
+            elif len(current_day["day"]) >= 3:                                        # мероприятия НЕ имеют определенной даты
+                event_numbers = len(current_day["events"].keys())  # количество мероприятий необходимое для присвоение дню
+                start, end = [int(n) for n in current_day["day"].split("-")]
+                for day in range(start, end + 1):
                     counter = 0
-                    assign = False  # все мероприятия присвоены
+                    assign = False                                                    # все мероприятия из списка присвоены
                     """>>> место для проверки очередности и последовательности мероприятий <<<"""
-                    """проверяем пустые ли мероприятие в течение интересующего нас дня"""
-                    for time_of_day in [t for t in event["events"].keys()]:
-                        """если время суток мероприятие пустое увеличиваем счетчик, иначе берем следующий день"""
-                        if plan[str(day)]["events"][time_of_day] == None:
+                    """
+                        В этой части кода мы проверяем не заняты ли времена суток(tod_) из исходного списка(current_day) 
+                        на конкретный день(day) в новом плане(new_plan). Если время суток на определенную дату в новом 
+                        плане пустое, счетчик увеличивается. Как только счетчик равен количеству мероприятий(event_numbers) 
+                        которые нам необходимо вставить, мы присваеваем данному дню мероприятия из списка current_day.
+                    """
+                    for tod_ in current_day["events"].keys():
+                        if new_plan[str(day)]["events"][tod_] is None:
                             counter += 1
-                            """если temp = количеству мероприятий в исходном файле, присваиваем мероприятия дню плана"""
-                            if counter == len(event["events"].keys()):
-                                for time_of_day in event["events"].keys():
-                                    plan[str(day)]["events"][time_of_day] = event["events"][time_of_day]
+                            if counter == event_numbers:
+                                for _tod in current_day["events"].keys():
+                                    new_plan[str(day)]["events"][_tod] = current_day["events"][_tod]
                                 assign = True
                                 break
                         else:
                             break
                     if assign:
                         break
-    return plan
+    return new_plan
 
 
 def generate_unimportant(plan, event_list):
-    """ТОЛЬКО ПОТОМУ ЧТО В unimportant_event_list.json в каждом из времен дня только 2! мероприятия"""
-    last_evening_event = event_list["evening"][0]
-    last_afternoon_event = event_list["afternoon"][0]
-    last_morning_event = event_list["morning"][0]
-    for day in plan.keys():    # iterate final_plan
-        for tod in event_list.keys():    # iterate schema
-            """universal"""
-            # если событие есть ->  дальше
-            if plan[day]["events"][tod] is not None:
+    """
+        Функция распределяет оставшиеся мероприятия по дням.
+                    ! Костыль: реализация функции возможна только потому что в unimportant_event_list.json !
+                                        в каждом из времен дней только 2! мероприятия
+        :param plan: план-скелет
+        :param event_list: словарь с мероприятиями
+        :return new_plan: новый план сгенерированных событий
+    """
+    new_plan = plan
+    last_event = {"evening": event_list["evening"][0],
+                  "afternoon": event_list["afternoon"][0],
+                  "morning": event_list["morning"][0]}
+    for current_day in new_plan.keys():                                                             # конкретный день
+        event = new_plan[current_day]["events"]  # блок мероприятий
+        for tod in event.keys():
+            """
+                Если мероприятие уже есть в плане мы проверяем является ли оно последним в списке и меняем его значение
+                если это необходимо. Также присутсвует исключение.
+            """
+            if event[tod] is not None:
+                if event[tod] in event_list[tod]:                   # одно из планируемых мероприяйтий
+                    last_event[tod] = event[tod]
+                if event["evening"] == 'танцевальный марафон':      # исключение
+                    last_event["evening"] = "дискотека"
+                else:
+                    pass
                 continue
-            # исключение
-            if plan[day]["events"]["evening"] == 'танцевальный марафон':
-                last_evening_event = "дискотека"
-            # если мероприятие в списке равно неважному_1 оно последнее во временном файле
-            elif plan[day]["events"][tod] == event_list[tod][0]:
-                if tod == "evening":
-                    last_evening_event = event_list[tod][0]
-                elif tod == "afternoon":
-                    last_afternoon_event = event_list[tod][0]
-                elif tod == "morning":
-                    last_morning_event = event_list[tod][0]
-            # если мероприятие в списке равно неважному_2 оно последнее во временном файле
-            elif plan[day]["events"][tod] == event_list[tod][1]:
-                if tod == "evening":
-                    last_evening_event = event_list[tod][1]
-                elif tod == "afternoon":
-                    last_afternoon_event = event_list[tod][1]
-                elif tod == "morning":
-                    last_morning_event = event_list[tod][1]
-            # если мероприятие в списке нет
-            elif plan[day]["events"][tod] is None:
-                if tod == "evening":
-                    # присваиваем отличное от последнего в списке мероприятия, перезаписываем временное
-                    if last_evening_event == event_list[tod][0]:
-                        plan[day]["events"][tod] = event_list[tod][1]
-                        last_evening_event = event_list[tod][1]
-                    else:
-                        plan[day]["events"][tod] = event_list[tod][0]
-                        last_evening_event = event_list[tod][0]
-                elif tod == "afternoon":
-                    if last_afternoon_event == event_list[tod][0]:
-                        plan[day]["events"][tod] = event_list[tod][1]
-                        last_afternoon_event = event_list[tod][1]
-                    else:
-                        plan[day]["events"][tod] = event_list[tod][0]
-                        last_afternoon_event = event_list[tod][0]
-                elif tod == "morning":
-                    if last_morning_event == event_list[tod][0]:
-                        plan[day]["events"][tod] = event_list[tod][1]
-                        last_morning_event = event_list[tod][1]
-                    else:
-                        plan[day]["events"][tod] = event_list[tod][0]
-                        last_morning_event = event_list[tod][0]
-    return plan
+            elif event[tod] is None:
+                 if last_event[tod] == event_list[tod][0]:
+                     event[tod] = event_list[tod][1]
+                 else:
+                     event[tod] = event_list[tod][0]
+                 last_event[tod] = event[tod]
+    return new_plan
 
 
-def generate_plan(date):
+def generate_plan(date: datetime):
+    """:param date: день начала смены"""
     # copy schema and insert calendar days
     plan = insert_date_info(date)  #
     # evening
     evening_events_list = r"application\data\evening_event_list.json"
-    evening_plan = generate_event(plan, convert_json(evening_events_list), tof="evening")
+    evening_plan = generate_event(plan, convert_json(evening_events_list), tod="evening")
     # afternoon
     afternoon_events_list = r"application\data\afternoon_event_list.json"
-    afternoon_plan = generate_event(evening_plan, convert_json(afternoon_events_list), tof="afternoon")
+    afternoon_plan = generate_event(evening_plan, convert_json(afternoon_events_list), tod="afternoon")
     # morning
     morning_event_list = r"application\data\morning_event_list.json"
-    morning_plan = generate_event(afternoon_plan, convert_json(morning_event_list), tof="morning")
+    morning_plan = generate_event(afternoon_plan, convert_json(morning_event_list), tod="morning")
     # unimportant
     unimportant_event_list = r"application\data\unimportant_event_list.json"
     FINAL_PLAN = generate_unimportant(morning_plan, convert_json(unimportant_event_list))
     # print(plan)
     return FINAL_PLAN
-
