@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}{% endblock %} - Генератор плана смены для детских учреждений.</title>
+
+  {% block style %}
+    {# "Необходимо реализовать таблицу стилей #}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  {% endblock %}
+</head>
+<body>
+  <header>
+    <p>Генератор плана смены: <a href="{{ url_for('get_home') }}">Главная</a> | <a href="{{ url_for('get_form') }}">Создать план</a></p>
+    <hr>
+  </header>
+
+  <main>{% block content %}{% endblock %}</main>
+
+  <footer>
+    <hr><p>created by <a href="mailto:ivan.kotitsyn@gmail.com">Ivan Kotitsyn</a>. 2020</p>
+  </footer>
+</body>
+</html>

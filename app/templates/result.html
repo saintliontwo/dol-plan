@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Готовый план{% endblock %}
+{% block style %}
+  <style>
+    h3 {
+      text-align: center;
+      line-height: 0;
+    }
+    table{
+      margin-left: auto;
+      margin-right: auto;
+      border-collapse: collapse;
+      border: 1px solid black;
+      width: 700px;
+      /* empty cells */
+      border-collapse: separate;
+      empty-cells: hide;
+    }
+    tr, th, td {
+      border: 1px solid black;
+    }
+    /*
+    .over-range {border-style:hidden;}
+    */
+  </style>
+{% endblock %}
+
+{% block content %}
+<h3>КАЛЕНДАРНЫЙ ПЛАН РАБОТЫ ДОЛ "ОРЛЕНОК"</h3>
+<h3>ППО МПЗ Роспрофком</h3>
+<h3>{{period}} СМЕНА {{year}}г.</h3><br>
+<table>
+  <caption></caption>
+  {% for day in range(1,11) %}
+  <tr class="row1">
+    <td rowspan="3" class="day{{(day)|string}}">{{ plan[(day)|string]["day description"]["date"] }}, {{ plan[day|string]["day description"]["name day"] }}</td>
+    <td class="tod-morning">УТРО:</td>
+    <td class="event-morning">{{ plan[day|string]["events"]["morning"] }}</td>
+    <td rowspan="3" class="day{{(day+11)|string}}">{{ plan[(day+11)|string]["day description"]["date"] }}, {{ plan[(day+11)|string]["day description"]["name day"] }}</td>
+    <td class="tod-morning">УТРО:</td>
+    <td class="event-morning day{{(day+11)|string}}">{{ plan[(day+11)|string]["events"]["morning"] }}</td>
+  </tr>
+  <tr class="row2">
+    <td class="tod-afternoon">ДЕНЬ:</td>
+    <td class="event-afternoon day{{(day)|string}}">{{ plan[(day)|string]["events"]["afternoon"] }}</td>
+    <td class="tod-afternoon">ДЕНЬ:</td>
+    <td class="event-afternoon day{{(day+11)|string}}">{{ plan[(day+11)|string]["events"]["afternoon"] }}</td>
+  </tr>
+  <tr class="row3">
+    <td class="tod-evening">ВЕЧЕР:</td>
+    <td class="event-evening day{{(day)|string}}">{{ plan[(day)|string]["events"]["evening"] }}</td>
+    <td class="tod-evening">ВЕЧЕР:</td>
+    <td class="evening-evening day{{(day+11)|string}}">{{ plan[(day+11)|string]["events"]["evening"] }}</td>
+  </tr>
+
+  {% endfor %}
+  <tr class="row1">
+    <td rowspan="3" class="day11">{{ plan["11"]["day description"]["date"] }}, {{ plan["11"]["day description"]["name day"] }}</td>
+    <td class="tod-morning">УТРО:</td>
+    <td class="event-morning day11">{{ plan["11"]["events"]["morning"] }}</td>
+    <td rowspan="3" class="day over-range"></td>
+    <td class="tod-morning over-range"></td>
+    <td class="event-morning over-range"></td>
+  </tr>
+  <tr class="row2">
+    <td class="tod-afternoon">ДЕНЬ:</td>
+    <td class="event-afternoon day11">{{ plan["11"]["events"]["afternoon"] }}</td>
+    <td class="tod-afternoon over-range"></td>
+    <td class="event-afternoon over-range"></td>
+  </tr>
+  <tr class="row3">
+    <td class="tod-evening">ВЕЧЕР:</td>
+    <td class="event-evening day11">{{ plan["11"]["events"]["evening"] }}</td>
+    <td class="tod-evening over-range"></td>
+    <td class="evening-evening over-range"></td>
+  </tr>
+</table>
+{% endblock %}
