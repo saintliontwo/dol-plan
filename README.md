@@ -28,7 +28,7 @@ dol_plan
 │   │   ├── evening_event_list.json
 │   │   ├── morning_event_list.json
 │   │   ├── schema.json
-│   │   ├── unimportant_event_list.json
+│   │   └── unimportant_event_list.json
 │   ├── static
 │   │   └── style.css
 │   ├── templates
