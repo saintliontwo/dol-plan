@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% if title %}
+    <title>{{ title }}</title>
+    {% else %}
+    <title>Тестовая страница</title>
+    {% endif %}
+    {% block head_css %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}">
+    {% endblock %}
+  </head>
+
+  <body>
+    <div>Генератор плана смены: <a href="{{ url_for('home') }}">Главная</a> | <a href="{{ url_for('form') }}">Создать план</a></div>
+    <hr>
+    {% block content %}{% endblock %}
+    <hr>
+    <div class="footer">created by <a href="mailto:ivan.kotitsyn@gmail.com">Ivan</a></div>
+  </body>
+</html>

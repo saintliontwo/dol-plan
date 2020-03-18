@@ -1,6 +1,0 @@
-﻿afternoon_event_list.json	-	список дневных мероприятий
-calendar_event_list		-	список мероприятий привязанных к календарной дате
-evening_event_list.json		-	список вечерних мероприятий
-morning_event_list.json		-	список утренних мероприятий
-schema.json			-	схема плана смены
-unimportant_event_list		-	список мероприятий не привязанных к календарной дате
