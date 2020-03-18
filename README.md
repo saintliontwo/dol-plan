@@ -21,14 +21,16 @@ wtforms==2.2.1
 
 ```
 dol_plan
-├── application
-│   ├── plan_generator
-│   │   ├── __init__.py
-│   │   ├── app_dol.py
-│   │   └── events.csv
+├── app
+│   ├── data
+│   │   ├── afternoon_event_list.json
+│   │   ├── calendar_event_list.json
+│   │   ├── evening_event_list.json
+│   │   ├── morning_event_list.json
+│   │   ├── schema.json
+│   │   ├── unimportant_event_list.json
 │   ├── static
-│   │   ├── css
-│   │   │   └── index.css
+│   │   └── style.css
 │   ├── templates
 │   │   ├── base.html
 │   │   ├── final.html
@@ -36,7 +38,9 @@ dol_plan
 │   │   └── home.html
 │   ├── __init__.py
 │   ├── forms.py
+│   ├── main.py
 │   └── views.py
+├── README.md
 ├── config
 ├── requiremints.txt
 └── run.py
