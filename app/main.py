@@ -40,6 +40,19 @@ def localize_day_name(day_number: str) -> str:
     return local_day_dict[day_number]
 
 
+def remain_main_event(plan: dict, new_event: str) -> dict:
+    """
+        Замещение названия центрального мероприятия из формы в плане смены
+        :param plan: исходный план
+        :param new_event: название центрального мероприятия которое передается при заполнении формы
+    """
+    new_plan = plan
+    for day in plan.keys():
+        if plan[day]["events"]["evening"] == "центральное мероприятие":
+            new_plan[day]["events"]["evening"] = new_event
+    return new_plan
+
+
 def insert_date_info(start_date: datetime) -> dict:
     """
         Инициализация календарных мероприятий в схеме.
